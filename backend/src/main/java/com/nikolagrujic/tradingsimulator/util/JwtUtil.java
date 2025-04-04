@@ -7,6 +7,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,6 +18,11 @@ import java.util.Map;
 public class JwtUtil {
     @Value("${jwt.secret}")
     private String jwtSecret;
+
+    @PostConstruct
+    public void init(){
+        System.out.println("JWT Secret: " + jwtSecret);
+    }
 
     public Claims extractAllClaims(String jwt) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwt).getBody();

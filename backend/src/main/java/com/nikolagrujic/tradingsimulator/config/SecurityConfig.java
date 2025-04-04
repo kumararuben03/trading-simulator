@@ -44,7 +44,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     Constants.VERIFY_EMAIL_PATH,
                     Constants.RESET_PASSWORD_BACKEND_PATH,
                     Constants.UPDATE_PASSWORD_PATH,
-                    "/login"
+                        "/login",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/api-docs/**"
                 ).permitAll()
                 .anyRequest().authenticated() // Require authentication for all other requests
             )
