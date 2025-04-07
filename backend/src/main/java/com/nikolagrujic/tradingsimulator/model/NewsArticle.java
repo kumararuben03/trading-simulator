@@ -35,6 +35,7 @@ public class NewsArticle {
 
     @NotNull
     @NotBlank
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @NotNull

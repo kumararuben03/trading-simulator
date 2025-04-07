@@ -10,6 +10,7 @@ import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
 import { isUserAuthenticated } from "../auth/auth.js";
 import { Navigate } from "react-router-dom";
+import tradingImage from "../assets/phone.png";
 
 const useStyles = makeStyles(() => ({
   appBar: {
@@ -24,6 +25,12 @@ const useStyles = makeStyles(() => ({
     marginTop: "2rem",
   },
   main: { margin: "1rem 0 0" },
+  imageContainer: {  // Add this new style
+    transition: "transform 0.3s ease-in-out",
+    "&:hover": {
+      transform: "scale(1.05)",
+    }
+  }
 }));
 
 export default function LandingPage() {
@@ -114,21 +121,21 @@ export default function LandingPage() {
             </Typography>
           </Grid>
           <Grid
-            item
-            xs={false}
-            sm={false}
-            md={6}
-            lg={6}
-            sx={{
-              backgroundImage:
-                "url(https://images.unsplash.com/photo-1650959828226-f9d53a7c1f64?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format)",
-              backgroundSize: "cover",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center center",
-              marginTop: "-5rem",
-              height: "500px",
-            }}
-          />
+  item
+  xs={false}
+  sm={false}
+  md={6}
+  lg={6}
+  className={classes.imageContainer}  // Add this line
+  sx={{
+    backgroundImage: `url(${tradingImage})`,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center center",
+    marginTop: "-5rem",
+    height: "500px",
+  }}
+/>
         </Grid>
       </div>
     </Box>
