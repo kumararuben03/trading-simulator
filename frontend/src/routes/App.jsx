@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import {
-  createTheme,
   StyledEngineProvider,
   ThemeProvider,
 } from "@mui/material/styles";
@@ -14,8 +13,7 @@ import { AppContent } from "../components/AppContent.jsx";
 import { useNavigate } from "react-router-dom";
 import { refreshJwt, signOut } from "../auth/auth.js";
 import { BASE_API_URL, ENDPOINTS } from '../data/constants.js';
-
-const mdTheme = createTheme();
+import theme from '../theme';
 
 export default function App() {
   const [open, setOpen] = useState(true);
@@ -64,7 +62,7 @@ export default function App() {
   }, [navigate]);
 
   return (
-    <ThemeProvider theme={mdTheme}>
+    <ThemeProvider theme={theme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar
@@ -83,8 +81,8 @@ export default function App() {
           sx={{
             backgroundColor: (theme) =>
               theme.palette.mode === "light"
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
+                ? theme.palette.background.default
+                : theme.palette.background.paper,
             flexGrow: 1,
             height: "100vh",
             overflow: "auto",

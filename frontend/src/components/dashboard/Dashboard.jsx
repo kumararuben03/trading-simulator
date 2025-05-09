@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Container, Typography } from "@mui/material";
 import PortfolioOverview from "../portfolio/PortfolioOverview";
 import PerformanceChart from "../portfolio/PerformanceChart";
 import BestWorstStocks from "./BestWorstStocks";
@@ -44,13 +44,17 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <Box my={5} maxWidth='80%' mx='auto'>
-      <Grid container spacing={2}>
-        <Grid item xs={12} lg={5} container spacing={2}>
-          <Grid item xs={6} sm={12} md={6} lg={12}>
-            <PortfolioOverview info='basic' stats={portfolioStats} />
+    <Container maxWidth="xl" sx={{ py: 4 }}>
+      <Typography variant="h4" fontWeight="500" color="primary" gutterBottom>
+        Dashboard
+      </Typography>
+      
+      <Grid container spacing={3}>
+        <Grid item xs={12} lg={5} container spacing={3}>
+          <Grid item xs={12} md={6} lg={12}>
+            <PortfolioOverview info="basic" stats={portfolioStats} />
           </Grid>
-          <Grid item xs={6} sm={12} md={6} lg={12}>
+          <Grid item xs={12} md={6} lg={12}>
             <BestWorstStocks />
           </Grid>
         </Grid>
@@ -58,14 +62,15 @@ export default function Dashboard() {
           <PerformanceChart />
         </Grid>
       </Grid>
-      <Grid container spacing={2} mt={2}>
-        <Grid item xs={12} lg={6}>
+      
+      <Grid container spacing={3} sx={{ mt: 1 }}>
+        <Grid item xs={12} md={6}>
           <RecommendedStock />
         </Grid>
-        <Grid item xs={12} lg={6}>
+        <Grid item xs={12} md={6}>
           <RecentTransactions />
         </Grid>
       </Grid>
-    </Box>
+    </Container>
   );
 }

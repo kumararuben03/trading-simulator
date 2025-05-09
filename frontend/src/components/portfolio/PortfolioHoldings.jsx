@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles } from "@mui/styles";
 import {
   Alert,
   Box,
@@ -13,6 +12,9 @@ import {
   Paper,
   CircularProgress,
   Typography,
+  Card,
+  Divider,
+  Chip,
 } from "@mui/material";
 import { fetchHoldings } from "../../helpers/PortfolioHoldingsHelpers.jsx";
 import {
@@ -21,21 +23,7 @@ import {
   getArrowDirection,
 } from "../../helpers/Helpers.jsx";
 
-const useStyles = makeStyles((theme) => ({
-  tableHeaderCell: {
-    fontWeight: "bold",
-    backgroundColor: "#333",
-    color: theme.palette.common.white,
-  },
-  tableRow: {
-    "&:nth-of-type(odd)": {
-      backgroundColor: "#fafafa",
-    },
-  },
-}));
-
 export default function PortfolioHoldings(props) {
-  const classes = useStyles();
   const [holdings, setHoldings] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -63,7 +51,7 @@ export default function PortfolioHoldings(props) {
 
   if (loading) {
     return (
-      <Box display='flex' justifyContent='center'>
+      <Box display="flex" justifyContent="center">
         <CircularProgress sx={{ margin: "auto", mt: 10 }} />
       </Box>
     );
@@ -71,7 +59,7 @@ export default function PortfolioHoldings(props) {
 
   if (error) {
     return (
-      <Alert severity='error' sx={{ mt: 2 }}>
+      <Alert severity="error" sx={{ mt: 2 }}>
         Couldn't fetch your portfolio holdings.
       </Alert>
     );
@@ -79,7 +67,7 @@ export default function PortfolioHoldings(props) {
 
   if (holdings.length === 0) {
     return (
-      <Alert severity='info' sx={{ mt: 2 }}>
+      <Alert severity="info" sx={{ mt: 2 }}>
         You don't have any holdings.
       </Alert>
     );
@@ -87,89 +75,107 @@ export default function PortfolioHoldings(props) {
 
   return (
     <Box sx={{ mt: 2 }}>
-      <Box display='flex' gap={5}>
-        <Box py={2}>
-          <Typography variant='body2'>TOTAL VALUE</Typography>
-          <Typography variant='h6' fontWeight='bold'>
-            ${formatFloat(props.stats.totalValue)}
-          </Typography>
-        </Box>
-        <Box py={2}>
-          <Typography variant='body2'>TOTAL GAIN/LOSS</Typography>
-          <Box display='flex'>
-            <Typography
-              variant='h6'
-              fontWeight='bold'
-              color={getColorStringByValue(props.stats.totalGainOrLoss)}
-            >
-              {props.stats.totalGainOrLoss < 0.0 && "-"}$
-              {formatFloat(Math.abs(props.stats.totalGainOrLoss))}
+      <Card elevation={2} sx={{ mb: 3, p: 2 }}>
+        <Box display="flex" justifyContent="space-between" flexWrap="wrap">
+          <Box p={2} sx={{ minWidth: 200 }}>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              TOTAL VALUE
             </Typography>
-            {getArrowDirection(props.stats.totalGainOrLoss)}
+            <Typography variant="h5" fontWeight="bold">
+              ${formatFloat(props.stats.totalValue)}
+            </Typography>
+          </Box>
+          <Divider orientation="vertical" flexItem sx={{ mx: 2 }} />
+          <Box p={2} sx={{ minWidth: 200 }}>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              TOTAL GAIN/LOSS
+            </Typography>
+            <Box display="flex" alignItems="center">
+              <Typography
+                variant="h5"
+                fontWeight="bold"
+                color={getColorStringByValue(props.stats.totalGainOrLoss)}
+                sx={{ mr: 1 }}
+              >
+                {props.stats.totalGainOrLoss < 0.0 && "-"}$
+                {formatFloat(Math.abs(props.stats.totalGainOrLoss))}
+              </Typography>
+              {getArrowDirection(props.stats.totalGainOrLoss)}
+            </Box>
           </Box>
         </Box>
-      </Box>
-      <TableContainer component={Paper}>
+      </Card>
+      
+      <TableContainer component={Paper} elevation={3}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell className={classes.tableHeaderCell}>#</TableCell>
-              <TableCell className={classes.tableHeaderCell}>Symbol</TableCell>
-              <TableCell className={classes.tableHeaderCell}>Name</TableCell>
-              <TableCell className={classes.tableHeaderCell}>
-                Current Price
-              </TableCell>
-              <TableCell className={classes.tableHeaderCell}>
-                Quantity
-              </TableCell>
-              <TableCell className={classes.tableHeaderCell}>
-                Total Purchase Price
-              </TableCell>
-              <TableCell className={classes.tableHeaderCell}>
-                Total Cash Value
-              </TableCell>
-              <TableCell className={classes.tableHeaderCell}>
-                Total Gain/Loss
-              </TableCell>
-              <TableCell className={classes.tableHeaderCell}>Type</TableCell>
-              <TableCell className={classes.tableHeaderCell}>
-                Duration
-              </TableCell>
+              <TableCell>#</TableCell>
+              <TableCell>Symbol</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Current Price</TableCell>
+              <TableCell>Quantity</TableCell>
+              <TableCell>Total Purchase Price</TableCell>
+              <TableCell>Total Cash Value</TableCell>
+              <TableCell>Total Gain/Loss</TableCell>
+              <TableCell>Type</TableCell>
+              <TableCell>Duration</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {holdings.map((holdings, idx) => (
-              <TableRow key={holdings.id} className={classes.tableRow}>
+              <TableRow key={holdings.id}>
                 <TableCell>{10 * page + idx + 1}</TableCell>
-                <TableCell>{holdings.symbol}</TableCell>
+                <TableCell>
+                  <Chip label={holdings.symbol} color="primary" size="small" />
+                </TableCell>
                 <TableCell>{holdings.name}</TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>
+                <TableCell sx={{ fontWeight: "600" }}>
                   ${formatFloat(holdings.currentPrice)}
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>
+                <TableCell sx={{ fontWeight: "600" }}>
                   {holdings.quantity}
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>
+                <TableCell sx={{ fontWeight: "600" }}>
                   ${formatFloat(holdings.purchasePrice)}
                 </TableCell>
-                <TableCell sx={{ fontWeight: "bold" }}>
+                <TableCell sx={{ fontWeight: "600" }}>
                   ${formatFloat(holdings.quantity * holdings.currentPrice)}
                 </TableCell>
-                <TableCell>{holdings.totalGainOrLoss}</TableCell>
-                <TableCell>{holdings.type}</TableCell>
+                <TableCell>
+                  <Typography
+                    color={getColorStringByValue(holdings.totalGainOrLoss)}
+                    sx={{ fontWeight: "600", display: "flex", alignItems: "center" }}
+                  >
+                    {holdings.totalGainOrLoss}
+                    {getArrowDirection(parseFloat(holdings.totalGainOrLoss))}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Chip 
+                    label={holdings.type} 
+                    color={holdings.type === "BUY" ? "success" : "error"} 
+                    variant="outlined"
+                    size="small"
+                  />
+                </TableCell>
                 <TableCell>{holdings.duration}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <Pagination
-        count={totalPages}
-        page={page + 1}
-        onChange={(_event, page) => handlePageChange(page - 1)}
-        color='primary'
-        sx={{ mt: 1 }}
-      />
+      <Box display="flex" justifyContent="center" mt={2}>
+        <Pagination
+          count={totalPages}
+          page={page + 1}
+          onChange={(_event, page) => handlePageChange(page - 1)}
+          color="primary"
+          size="large"
+          showFirstButton
+          showLastButton
+        />
+      </Box>
     </Box>
   );
 }

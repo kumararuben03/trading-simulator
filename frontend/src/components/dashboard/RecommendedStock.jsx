@@ -6,13 +6,21 @@ import {
   Paper,
   Typography,
   Divider,
+  Card,
+  CardHeader,
+  CardContent,
+  Chip,
+  useTheme,
+  Avatar,
 } from "@mui/material";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import { formatFloat } from "../../helpers/Helpers";
 import { BASE_API_URL, ENDPOINTS } from '../../data/constants';
 
 export default function RecommendedStock() {
   const [stock, setStock] = useState(null);
   const [loading, setLoading] = useState(false);
+  const theme = useTheme();
 
   useEffect(() => {
     const fetchRecommendedStock = async () => {
@@ -44,39 +52,77 @@ export default function RecommendedStock() {
   }, []);
 
   return (
-    <Box component={Paper} elevation={3} padding={2} height='100%'>
-      <Box>
-        <Typography variant='h6'>Recommended Stock</Typography>
-        <Box>
-          <Divider style={{ margin: "10px 0" }} />
-          {loading && <CircularProgress size={30} />}
-          {!loading && stock === null && (
-            <Typography fontStyle='italic'>
+    <Card elevation={3} sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <CardHeader 
+        title="Recommended Stock" 
+        sx={{ 
+          bgcolor: theme.palette.primary.main,
+          color: theme.palette.primary.contrastText,
+          pb: 1
+        }}
+      />
+      <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+        {loading && (
+          <Box display="flex" justifyContent="center" alignItems="center" sx={{ flexGrow: 1 }}>
+            <CircularProgress size={40} />
+          </Box>
+        )}
+        
+        {!loading && stock === null && (
+          <Box display="flex" justifyContent="center" alignItems="center" sx={{ flexGrow: 1 }}>
+            <Typography fontStyle="italic" color="text.secondary">
               Failed to fetch recommended stock.
             </Typography>
-          )}
-          {!loading && stock !== null && (
-            <Box>
-              <Box display='flex'>
-                <Typography variant='h6'>{stock.symbol}</Typography>
-                <Box ml={3}>
-                  <Typography variant='subtitle1'>{stock.name}</Typography>
-                  <Typography variant='body2'>{stock.exchange}</Typography>
-                  <Typography variant='h6'>
+          </Box>
+        )}
+        
+        {!loading && stock !== null && (
+          <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+            <Box display="flex" mb={2}>
+              <Avatar 
+                sx={{ 
+                  bgcolor: theme.palette.primary.light,
+                  width: 60,
+                  height: 60,
+                  mr: 2
+                }}
+              >
+                {stock.symbol.charAt(0)}
+              </Avatar>
+              <Box>
+                <Box display="flex" alignItems="center" mb={0.5}>
+                  <Typography variant="h5" fontWeight="bold" mr={1}>
+                    {stock.symbol}
+                  </Typography>
+                  <Chip 
+                    label={stock.exchange} 
+                    size="small" 
+                    color="secondary" 
+                    variant="outlined"
+                  />
+                </Box>
+                <Typography variant="body1" color="text.secondary" gutterBottom>
+                  {stock.name}
+                </Typography>
+                <Box display="flex" alignItems="center">
+                  <Typography variant="h6" fontWeight="bold" color="primary">
                     ${formatFloat(stock.currentPrice)}
                   </Typography>
+                  <TrendingUpIcon 
+                    sx={{ ml: 1, color: theme.palette.success.main }} 
+                  />
                 </Box>
               </Box>
-              <Divider style={{ margin: "10px 0" }} />
-              <Box display='flex' justifyContent='flex-end'>
-                <Button variant='outlined' color='primary'>
-                  Trade
-                </Button>
-              </Box>
             </Box>
-          )}
-        </Box>
-      </Box>
-    </Box>
+            
+            <Box sx={{ mt: 'auto', display: 'flex', justifyContent: 'flex-end' }}>
+              <Button variant="contained" color="primary" size="large">
+                Trade Now
+              </Button>
+            </Box>
+          </Box>
+        )}
+      </CardContent>
+    </Card>
   );
 }
